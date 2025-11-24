@@ -12,7 +12,7 @@ public class GameManager : MonoBehaviour
     
     public bool isPlaying = true;
     private int score = 0;
-    private int maxScore = 7;
+    private int maxScore = 7; // Cambiado a 7 puntos para ganar
 
     void Awake()
     {
@@ -45,6 +45,11 @@ public class GameManager : MonoBehaviour
             Win();
         }
     }
+    
+    public int GetScore()
+    {
+        return score;
+    }
 
     void UpdateScoreUI()
     {
@@ -59,6 +64,13 @@ public class GameManager : MonoBehaviour
         isPlaying = false;
         Time.timeScale = 0f;
         
+        // renaudar el video cuando gana
+        if (VideoController.instance != null)
+        {
+            VideoController.instance.PlayVideo();
+            Debug.Log("Video renaudado - Ganaste!");
+        }
+        
         if (winPanel != null)
         {
             winPanel.SetActive(true);
@@ -70,6 +82,13 @@ public class GameManager : MonoBehaviour
         isPlaying = false;
         Time.timeScale = 0f;
         
+        // Pausar el video cuando pierde
+        if (VideoController.instance != null)
+        {
+            VideoController.instance.PauseVideo();
+            Debug.Log("Video pausado - Game Over!");
+        }
+        
         if (gameOverPanel != null)
         {
             gameOverPanel.SetActive(true);
@@ -79,12 +98,26 @@ public class GameManager : MonoBehaviour
     public void BackToMenu()
     {
         Time.timeScale = 1f;
-        SceneManager.LoadScene("Windowsescritorio");
+        
+        // Reanudar el video si existe
+        if (VideoController.instance != null)
+        {
+            VideoController.instance.PlayVideo();
+        }
+        
+        SceneManager.LoadScene("Windowsescritorio"); // ← Cambia este nombre si tu escena se llama diferente
     }
 
     public void RestartGame()
     {
         Time.timeScale = 1f;
-        SceneManager.LoadScene("flapibird");
+        
+        // Reanudar el video si existe
+        if (VideoController.instance != null)
+        {
+            VideoController.instance.PlayVideo();
+        }
+        
+        SceneManager.LoadScene("flapibird"); // ← Cambia este nombre si tu escena se llama diferente
     }
 }
